@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CinéNael – Films & Séries</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#141414;--tx:#fff;--mu:#a8a8a8;--red:#e50914;--card:#2a2a2a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:linear-gradient(#141414,#141414e6)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#141414;z-index:10}
+.logo{display:flex;align-items:center;gap:6px;font-weight:900;letter-spacing:.06em;color:var(--red);font-size:1.15rem}
+.logo span.e{font-size:1.3rem;filter:none}
+.fbtn{background:transparent;border:1px solid #666;color:#fff;border-radius:6px;padding:6px 12px;font-size:.9rem}
+.hero{margin:0 0 10px;padding:70px 16px 22px;background:linear-gradient(transparent 30%,var(--bg)),var(--hg,linear-gradient(135deg,#7a0b12,#1b1b1b));min-height:300px;display:flex;flex-direction:column;justify-content:flex-end;position:relative}
+.hero .big{position:absolute;right:14px;top:20px;font-size:5.5rem;opacity:.85}
+.hero h1{margin:0 0 4px;font-size:1.9rem;line-height:1.1;max-width:80%}
+.hero .m{color:var(--mu);font-size:.85rem;margin-bottom:8px}
+.hero p{margin:0 0 12px;max-width:95%}
+.row-b{display:flex;gap:8px}
+.b{border:0;border-radius:6px;padding:9px 16px;font-weight:700;font-size:.95rem;cursor:pointer}
+.b.w{background:#fff;color:#000}.b.g{background:#6d6d6eb3;color:#fff}
+h2{font-size:1.05rem;margin:18px 14px 8px}
+.row{display:flex;gap:8px;overflow-x:auto;padding:0 14px 4px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.row::-webkit-scrollbar{display:none}
+.card{flex:0 0 118px;height:170px;border-radius:6px;position:relative;overflow:hidden;scroll-snap-align:start;cursor:pointer;background:var(--card);padding:0;border:0;color:#fff;text-align:left}
+.card .e{position:absolute;top:22px;left:0;right:0;text-align:center;font-size:2.6rem}
+.card .t{position:absolute;bottom:0;left:0;right:0;padding:18px 8px 8px;background:linear-gradient(transparent,#000d);font-weight:700;font-size:.82rem;line-height:1.15}
+.card .t small{display:block;font-weight:400;color:#ccc;font-size:.7rem;margin-top:2px}
+.tag{position:absolute;top:6px;left:6px;background:var(--red);font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:3px}
+#panel{display:none;margin:0 14px 6px;padding:12px;background:#1f1f1f;border-radius:8px}
+#panel.open{display:block}
+.lbl{color:var(--mu);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;margin:10px 0 6px}
+.lbl:first-child{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:transparent;border:1px solid #555;color:#fff;border-radius:99px;padding:6px 11px;font-size:.85rem;cursor:pointer}
+.chip.on{background:var(--red);border-color:var(--red)}
+.clr{margin-top:10px;background:none;border:0;color:var(--mu);text-decoration:underline;font-size:.85rem}
+#modal{position:fixed;inset:0;background:#000b;z-index:20;display:none;align-items:flex-end;justify-content:center}
+#modal.open{display:flex}
+.sheet{background:#181818;width:100%;max-width:560px;max-height:85%;overflow:auto;border-radius:14px 14px 0 0;padding:0 0 calc(18px + env(safe-area-inset-bottom,0px))}
+.sh{height:150px;display:flex;align-items:center;justify-content:center;font-size:4.5rem;position:relative}
+.x{position:absolute;top:10px;right:10px;background:#000a;color:#fff;border:0;border-radius:50%;width:32px;height:32px;font-size:1rem}
+.sb{padding:14px 16px}
+.sb h3{margin:0 0 4px;font-size:1.3rem}
+.pf{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.pf span{background:#333;border-radius:4px;padding:3px 8px;font-size:.8rem}
+.nores{padding:20px 14px;color:var(--mu)}
+footer{padding:22px 14px 30px;color:var(--mu);font-size:.75rem}
+footer a{color:#ddd}
+</style></head><body>
+<header><div class="logo"><span class="e">🎥🍿</span>CINÉNAEL</div><button class="fbtn" id="fb">⚙︎ Filtrer</button></header>
+
+<div id="panel"></div>
+<div class="hero" id="hero"></div>
+<div style="padding:0 14px 4px"><button class="b" id="adv" style="width:100%;background:#e50914;color:#fff;padding:13px;font-size:1rem">🎯 Conseille-moi un film</button></div>
+<div style="padding:0 14px 6px"><input id="q" type="search" placeholder="🔍 Rechercher un titre…" style="width:100%;padding:11px 12px;border-radius:6px;border:1px solid #555;background:#1f1f1f;color:#fff;font-size:1rem"></div>
+<div id="rows"></div>
+
+<div id="modal"><div class="sheet" id="sheet"></div></div>
+<footer>Les catalogues changent souvent et certaines applis sont payantes : le bouton « Où le voir ? » ouvre JustWatch pour vérifier la dispo du moment. Gratuit et légal : <a href="https://www.arte.tv/fr/" target="_blank" rel="noopener">Arte.tv</a>, <a href="https://www.france.tv/" target="_blank" rel="noopener">France.tv</a>, <a href="https://pluto.tv/fr" target="_blank" rel="noopener">Pluto TV</a>, <a href="https://archive.org/details/feature_films" target="_blank" rel="noopener">Internet Archive</a>.</footer>
+
+<script>
+var M=["😂 Rire","😱 Frissons","😢 Émotion","💥 Action","🧠 Réflexion","😌 Détente"];
+var ME=["😂","😱","😢","💥","🧠","😌"];
+var MG=["#b8860b,#3a2a05","#4a0e4e,#12041a","#1e4d7a,#071624","#a63a0d,#2a0d03","#0d6b5c,#04201b","#2f7d32,#0a210c"];
+var G=["Comédie","Thriller","Drame","Sci-fi","Animation","Aventure","Policier","Fantastique"];
+var AP=["Netflix","Prime Video","Disney+","Canal+","Apple TV+","Arte.tv","France.tv","Internet Archive"];
+var C=[
+["Intouchables",2011,"Film",["Comédie","Drame"],0,112,"Un aristocrate tétraplégique engage un jeune de banlieue comme aide. Une amitié improbable."],
+["La Cité de la peur",1994,"Film",["Comédie"],0,92,"Une attachée de presse, un tueur en série et le festival de Cannes. Culte."],
+["Kaamelott",2005,"Série",["Comédie","Fantastique"],0,4,"Le roi Arthur et ses chevaliers pas très doués. Épisodes ultra courts."],
+["Le Dîner de cons",1998,"Film",["Comédie"],0,80,"Un dîner où l’on invite un « con » tourne mal pour l’organisateur."],
+["Brooklyn Nine-Nine",2013,"Série",["Comédie","Policier"],0,22,"Un commissariat de New York et des flics complètement barrés."],
+["The Grand Budapest Hotel",2014,"Film",["Comédie","Aventure"],0,100,"Un concierge légendaire et son lobby boy dans un palace d’Europe de l’Est."],
+["Dix pour cent",2015,"Série",["Comédie","Drame"],0,52,"Les coulisses d’une agence d’artistes parisienne."],
+["Get Out",2017,"Film",["Thriller"],1,104,"Un week-end chez les parents de sa copine vire au cauchemar."],
+["Le Silence des agneaux",1991,"Film",["Thriller","Policier"],1,118,"Une agente du FBI consulte Hannibal Lecter pour traquer un tueur."],
+["Stranger Things",2016,"Série",["Fantastique","Sci-fi"],1,50,"Un garçon disparaît et une fille aux pouvoirs étranges apparaît."],
+["Hérédité",2018,"Film",["Thriller","Fantastique"],1,127,"Une famille endeuillée découvre de sinistres secrets. Très angoissant."],
+["The Haunting of Hill House",2018,"Série",["Fantastique","Drame"],1,55,"Une fratrie hantée par la maison de son enfance."],
+["Nosferatu",1922,"Film",["Fantastique"],1,94,"Le vampire muet originel. Domaine public."],
+["Gone Girl",2014,"Film",["Thriller","Policier"],1,149,"Une épouse disparaît, le mari devient suspect."],
+["La vie est belle",1946,"Film",["Drame","Fantastique"],2,130,"Un homme au bord du suicide voit ce qu’aurait été le monde sans lui."],
+["Le Fabuleux Destin d’Amélie Poulain",2001,"Film",["Comédie","Drame"],2,122,"Une serveuse montmartroise décide d’embellir la vie des autres."],
+["Un homme d’exception",2001,"Film",["Drame"],2,135,"Le parcours d’un génie des maths aux prises avec la schizophrénie."],
+["This Is Us",2016,"Série",["Drame"],2,43,"Les vies entrelacées d’une famille sur plusieurs décennies."],
+["Là-haut",2009,"Film",["Animation","Aventure"],2,96,"Un vieil homme s’envole en maison ballon vers l’Amérique du Sud."],
+["Mad Max: Fury Road",2015,"Film",["Sci-fi","Aventure"],3,120,"Une course-poursuite post-apocalyptique non-stop."],
+["John Wick",2014,"Film",["Thriller","Policier"],3,101,"Un ex-tueur à gages venge son chien. Action chorégraphiée."],
+["Le Cercle rouge",1970,"Film",["Policier","Thriller"],3,140,"Un casse de bijouterie orchestré par trois hommes. Melville."],
+["Les Aventuriers de l’arche perdue",1981,"Film",["Aventure"],3,115,"Indiana Jones contre les nazis pour retrouver l’Arche d’alliance."],
+["Peaky Blinders",2013,"Série",["Drame","Policier"],3,58,"Un gang de Birmingham dans l’entre-deux-guerres."],
+["Inception",2010,"Film",["Sci-fi","Thriller"],4,148,"Voler des secrets dans les rêves. Un puzzle maousse."],
+["Black Mirror",2011,"Série",["Sci-fi","Thriller"],4,55,"Anthologie sur les dérives de la technologie."],
+["Matrix",1999,"Film",["Sci-fi"],4,136,"Et si la réalité n’était qu’une simulation ?"],
+["Metropolis",1927,"Film",["Sci-fi"],4,150,"Chef-d’œuvre muet de Fritz Lang. Classique du cinéma."],
+["Dark",2017,"Série",["Sci-fi","Thriller"],4,55,"Des disparitions d’enfants, un voyage dans le temps. Un casse-tête allemand."],
+["Parasite",2019,"Film",["Thriller","Drame"],4,132,"Une famille pauvre s’infiltre chez une famille riche. Palme d’or."],
+["Sherlock",2010,"Série",["Policier"],4,88,"Sherlock Holmes à l’ère moderne, avec Benedict Cumberbatch."],
+["Le Voyage de Chihiro",2001,"Film",["Animation","Fantastique"],5,125,"Une fillette perdue dans un monde d’esprits. Miyazaki."],
+["Ratatouille",2007,"Film",["Animation","Comédie"],5,111,"Un rat rêve de devenir grand chef à Paris."],
+["Le Seigneur des anneaux",2001,"Film",["Fantastique","Aventure"],5,178,"Un hobbit doit détruire un anneau maléfique."],
+["Ted Lasso",2020,"Série",["Comédie","Drame"],5,30,"Un coach américain débarque dans le foot anglais. Feel-good."],
+["Charade",1963,"Film",["Policier","Comédie"],5,113,"Audrey Hepburn et Cary Grant à Paris, thriller romantique."],
+["Le Voyage dans la Lune",1902,"Film",["Sci-fi","Aventure"],5,15,"Le tout premier film de science-fiction, signé Méliès. 15 minutes."]
+];
+var P={"Intouchables":["Netflix","Prime Video"],"La Cité de la peur":["Prime Video","Canal+"],"Kaamelott":["Prime Video","Canal+"],"Le Dîner de cons":["Prime Video","Canal+"],"Brooklyn Nine-Nine":["Netflix","Prime Video"],"The Grand Budapest Hotel":["Disney+"],"Get Out":["Prime Video","Canal+"],"Le Silence des agneaux":["Prime Video","Canal+"],"Stranger Things":["Netflix"],"Hérédité":["Prime Video"],"The Haunting of Hill House":["Netflix"],"Nosferatu":["Internet Archive"],"La vie est belle":["Prime Video","Internet Archive"],"Le Fabuleux Destin d’Amélie Poulain":["Netflix","Canal+"],"Un homme d’exception":["Prime Video"],"This Is Us":["Disney+"],"Là-haut":["Disney+"],"Mad Max: Fury Road":["Netflix","Canal+"],"John Wick":["Prime Video","Netflix"],"Le Cercle rouge":["Arte.tv","Canal+"],"Les Aventuriers de l’arche perdue":["Disney+"],"Peaky Blinders":["Netflix"],"Inception":["Netflix","Prime Video"],"Black Mirror":["Netflix"],"Matrix":["Netflix","Prime Video"],"Metropolis":["Internet Archive","Arte.tv"],"Dark":["Netflix"],"Parasite":["Prime Video","Canal+"],"Le Voyage de Chihiro":["Netflix"],"Ratatouille":["Disney+"],"Le Seigneur des anneaux":["Prime Video"],"Ted Lasso":["Apple TV+"],"Charade":["Internet Archive"],"Le Voyage dans la Lune":["Internet Archive","Arte.tv"],"Sherlock":["Netflix","Prime Video"],"Dix pour cent":["France.tv","Netflix"],"Gone Girl":["Netflix","Prime Video","Canal+"]};
+var MORE=`Les Visiteurs|1993|F|Co,Fa|0|107|Un chevalier et son écuyer débarquent en 1993.|C,P
+Astérix et Obélix: Mission Cléopâtre|2002|F|Co,Av|0|107|Un palais à bâtir en trois mois pour Cléopâtre.|N,P
+Les Tuche|2011|F|Co|0|95|Une famille de chômeurs gagne au loto.|C
+OSS 117: Le Caire, nid d’espions|2006|F|Co,Po|0|99|Un agent secret très maladroit en Égypte.|C,P
+La Vie est un long fleuve tranquille|1988|F|Co|0|89|Deux familles opposées après un échange de bébés.|C,P
+Bienvenue chez les Ch’tis|2008|F|Co|0|106|Un directeur de poste muté dans le Nord.|N,C
+Les Bronzés|1978|F|Co|0|90|Des vacances au club qui tournent mal.|C,P
+Le Père Noël est une ordure|1982|F|Co|0|87|Une nuit de Noël à la permanence SOS.|C,P
+Taxi|1998|F|Co,Po|3|86|Un taxi ultra rapide aide un flic marseillais.|N,P
+Léon|1994|F|Th,Dr|3|110|Un tueur à gages protège une fillette.|N,P
+La Haine|1995|F|Dr|4|98|24 heures en banlieue après une bavure.|C,P
+Les Choristes|2004|F|Dr|2|97|Un surveillant fait chanter des enfants.|N,C
+Un prophète|2009|F|Dr,Po|4|155|Un jeune détenu gravit les échelons en prison.|N,C
+La Famille Bélier|2014|F|Co,Dr|2|106|Une ado entendante dans une famille sourde.|N,C
+Qu’est-ce qu’on a fait au Bon Dieu ?|2014|F|Co|0|97|Quatre gendres de religions différentes.|N,C
+Forrest Gump|1994|F|Co,Dr|2|142|La vie extraordinaire d’un homme simple.|N,P
+Le Parrain|1972|F|Dr,Po|4|175|Une dynastie mafieuse new-yorkaise.|P,C
+Pulp Fiction|1994|F|Po,Co|4|154|Des gangsters de Los Angeles aux destins entrelacés.|N,P
+Les Évadés|1994|F|Dr|2|142|Un banquier condamné à tort s’évade.|N,P
+Fight Club|1999|F|Th,Dr|4|139|Un insomniaque fonde un club de combat.|D,P
+Gladiator|2000|F|Av,Dr|3|155|Un général devenu gladiateur se venge.|N,P
+Titanic|1997|F|Dr|2|194|Un amour impossible à bord du paquebot.|P,C
+Avatar|2009|F|SF,Av|3|162|Un ex-marine sur la planète Pandora.|D
+Interstellar|2014|F|SF,Dr|4|169|Un voyage spatial pour sauver l’humanité.|N,P
+The Dark Knight|2008|F|Po,Th|3|152|Batman face au Joker.|N,P
+Le Roi Lion|1994|F|An,Dr|5|88|Un lionceau reprend son royaume.|D
+La Reine des neiges|2013|F|An,Fa|5|102|Deux sœurs, la glace et la magie.|D
+Toy Story|1995|F|An,Co|5|81|Les jouets prennent vie.|D
+Shrek|2001|F|An,Co|0|90|Un ogre sauve une princesse.|N,P
+Les Indestructibles|2004|F|An,Av|5|115|Une famille de super-héros.|D
+Coco|2017|F|An,Fa|2|105|Un garçon dans le monde des morts.|D
+Vice-Versa|2015|F|An,Co|2|95|Les émotions dans la tête d’une ado.|D
+Le Monde de Nemo|2003|F|An,Av|5|100|Un poisson-clown cherche son fils.|D
+Moi, moche et méchant|2010|F|An,Co|0|95|Un méchant adopte trois fillettes.|N,P
+Harry Potter à l’école des sorciers|2001|F|Fa,Av|5|152|Un orphelin découvre qu’il est sorcier.|P
+Jurassic Park|1993|F|SF,Av|3|127|Un parc de dinosaures qui tourne mal.|N,P
+Retour vers le futur|1985|F|SF,Co|5|116|Un ado voyage dans le temps en DeLorean.|N,P
+E.T. l’extra-terrestre|1982|F|SF,Dr|2|115|Un extraterrestre se lie d’amitié avec un enfant.|N,P
+Les Dents de la mer|1975|F|Th|1|124|Un requin terrorise une station balnéaire.|N,P
+Shining|1980|F|Th,Fa|1|146|Un gardien d’hôtel sombre dans la folie.|P,C
+Psychose|1960|F|Th|1|109|Un motel et son étrange gérant.|N,P
+Alien|1979|F|SF,Th|1|117|Un monstre à bord d’un vaisseau.|D
+Terminator 2|1991|F|SF,Th|3|137|Un cyborg protège un enfant.|P,C
+Die Hard|1988|F|Th|3|132|Un flic seul contre des terroristes.|D
+Casino Royale|2006|F|Po,Th|3|144|Les débuts de James Bond.|P
+Mission: Impossible - Fallout|2018|F|Th|3|147|Ethan Hunt en course contre la montre.|N,P
+Top Gun: Maverick|2022|F|Dr,Av|3|130|Maverick forme une nouvelle génération de pilotes.|P,C
+Avengers: Endgame|2019|F|SF,Av|3|181|Les héros affrontent Thanos.|D
+Spider-Man: New Generation|2018|F|An,Av|3|117|Miles Morales devient Spider-Man.|N,P
+La La Land|2016|F|Dr|2|128|Une actrice et un pianiste à Los Angeles.|N,P
+Whiplash|2014|F|Dr|4|107|Un batteur face à un prof tyrannique.|N,P
+Joker|2019|F|Th,Dr|4|122|La chute d’Arthur Fleck.|N,P
+Oppenheimer|2023|F|Dr|4|180|L’inventeur de la bombe atomique.|P
+Barbie|2023|F|Co,Fa|0|114|Barbie découvre le monde réel.|N,P
+Dune|2021|F|SF,Av|3|155|Paul Atreides sur la planète désert.|N,P
+Shutter Island|2010|F|Th|4|138|Un marshal enquête sur une île-asile.|N,P
+Se7en|1995|F|Th,Po|1|127|Deux flics traquent un tueur aux péchés capitaux.|N,P
+Les Infiltrés|2006|F|Th,Po|4|151|Un flic infiltré et une taupe de la mafia.|N,P
+Le Prestige|2006|F|Th,Fa|4|130|Deux magiciens rivaux.|N,P
+Memento|2000|F|Th|4|113|Un homme sans mémoire cherche un tueur.|N,P
+Truman Show|1998|F|Co,Dr|4|103|Un homme vit dans une émission télé.|P,C
+Le Pianiste|2002|F|Dr|2|150|Un pianiste juif survit à Varsovie.|N,P
+La Liste de Schindler|1993|F|Dr|2|195|Un industriel sauve des juifs.|N,P
+La Ligne verte|1999|F|Dr,Fa|2|189|Un gardien de prison et un détenu miraculeux.|N,P
+Pretty Woman|1990|F|Co,Dr|5|119|Un homme d’affaires et une escort.|D,P
+Dirty Dancing|1987|F|Dr|5|100|Un été, une danse, un amour.|N,P
+Mamma Mia !|2008|F|Co|5|108|Une mariée et ses trois pères potentiels.|N,P
+Madame Doubtfire|1993|F|Co|0|125|Un père se déguise en nounou.|D
+Maman, j’ai raté l’avion|1990|F|Co|0|103|Un enfant seul défend la maison.|D
+SOS Fantômes|1984|F|Co,Fa|0|105|Des chasseurs de fantômes à New York.|N,P
+Very Bad Trip|2009|F|Co|0|100|Un enterrement de vie de garçon qui dérape.|N,P
+Les Gardiens de la Galaxie|2014|F|SF,Co|3|121|Une bande de hors-la-loi cosmique.|D
+Le Cinquième Élément|1997|F|SF,Av|3|126|Une danseuse sauve la Terre.|N,P
+Blade Runner 2049|2017|F|SF|4|164|Un officier découvre un secret qui peut tout changer.|N,P
+Ex Machina|2014|F|SF,Th|4|108|Un test de conscience pour une IA.|N,P
+Her|2013|F|SF,Dr|2|126|Un homme tombe amoureux d’une IA.|N,P
+Princesse Mononoké|1997|F|An,Fa|5|134|Une guerre entre la forêt et les humains.|N
+Mon voisin Totoro|1988|F|An,Fa|5|86|Deux sœurs et un esprit de la forêt.|N
+Le Château ambulant|2004|F|An,Fa|5|119|Une jeune fille maudite rencontre un magicien.|N
+Your Name|2016|F|An,Dr|2|106|Deux ados échangent leurs corps.|P
+Dernier train pour Busan|2016|F|Th,Fa|1|118|Des zombies dans un train.|N,P
+Le Labyrinthe de Pan|2006|F|Fa,Dr|1|119|Une fillette dans un monde fantastique sous Franco.|N,C
+Ça|2017|F|Th,Fa|1|135|Un clown maléfique hante une ville.|N,P
+Conjuring|2013|F|Th,Fa|1|112|Des chasseurs de démons dans une ferme hantée.|N,P
+Scream|1996|F|Th|1|111|Un tueur masqué appelle ses victimes.|N,P
+Halloween|1978|F|Th|1|91|Michael Myers revient à Haddonfield.|P
+Le Magicien d’Oz|1939|F|Fa,Av|5|102|Dorothy dans un monde magique.|P
+Casablanca|1942|F|Dr|2|102|Un bar, un amour de guerre.|P
+Le Dictateur|1940|F|Co,Dr|0|125|La satire de Chaplin sur Hitler.|I
+Les Temps modernes|1936|F|Co|0|87|Charlot face à l’usine.|I
+Le Kid|1921|F|Co,Dr|2|68|Charlot élève un enfant abandonné.|I
+La Nuit des morts-vivants|1968|F|Th,Fa|1|96|Les morts se relèvent. Domaine public.|I
+Le Cabinet du docteur Caligari|1920|F|Th,Fa|1|76|Un classique expressionniste muet.|I,T
+Game of Thrones|2011|S|Dr,Fa|3|57|La guerre pour le Trône de fer.|C,P
+Breaking Bad|2008|S|Dr,Th|4|47|Un prof de chimie devient trafiquant.|N
+Better Call Saul|2015|S|Dr,Po|4|46|L’avocat d’avant Breaking Bad.|N
+The Office (US)|2005|S|Co|0|22|Le quotidien d’un bureau déjanté.|P
+Friends|1994|S|Co|0|22|Six amis à New York.|N,P
+How I Met Your Mother|2005|S|Co|0|22|Ted raconte comment il a rencontré leur mère.|D
+The Big Bang Theory|2007|S|Co|0|22|Des geeks et leur voisine.|P,C
+Modern Family|2009|S|Co|0|22|Trois familles, un grand foutoir.|D
+Seinfeld|1989|S|Co|0|22|Une série sur rien.|N
+Lupin|2021|S|Av,Po|3|45|Un gentleman cambrioleur à Paris.|N
+Le Bureau des légendes|2015|S|Th,Dr|4|52|Les espions de la DGSE.|C,P
+Engrenages|2005|S|Po,Dr|3|52|La police judiciaire parisienne.|C
+Plan Cœur|2018|S|Co|0|30|Une bande de potes et un faux amoureux.|N
+Les Revenants|2012|S|Fa,Th|1|52|Les morts reviennent dans une ville de montagne.|C,P
+La Casa de Papel|2017|S|Th,Av|3|50|Un braquage de la Monnaie d’Espagne.|N
+Squid Game|2021|S|Th,Dr|1|55|Des jeux mortels pour de l’argent.|N
+Mercredi|2022|S|Fa,Co|5|47|Mercredi Addams au pensionnat.|N
+The Witcher|2019|S|Fa,Av|3|60|Un chasseur de monstres.|N
+Narcos|2015|S|Dr,Po|3|50|L’ascension de Pablo Escobar.|N
+Ozark|2017|S|Dr,Th|4|60|Un comptable blanchit de l’argent.|N
+Mindhunter|2017|S|Po,Th|4|55|Le profilage des tueurs en série.|N
+The Crown|2016|S|Dr|2|58|Le règne d’Elizabeth II.|N
+La Chronique des Bridgerton|2020|S|Dr|5|60|Romances dans la haute société anglaise.|N
+Emily in Paris|2020|S|Co|5|30|Une Américaine à Paris.|N
+Sex Education|2019|S|Co,Dr|0|50|Un ado devient conseiller sexuel.|N
+Cobra Kai|2018|S|Co,Dr|3|30|La suite de Karaté Kid.|N
+The Boys|2019|S|SF,Co|3|60|Des super-héros pourris.|P
+The Mandalorian|2019|S|SF,Av|3|40|Un chasseur de primes dans l’univers Star Wars.|D
+WandaVision|2021|S|SF,Co|4|35|Wanda dans une sitcom étrange.|D
+Loki|2021|S|SF,Av|3|47|Le dieu de la malice et le temps.|D
+The Bear|2022|S|Dr,Co|4|30|Un chef reprend un resto de sandwiches.|D
+Only Murders in the Building|2021|S|Co,Po|0|35|Trois voisins enquêtent sur un meurtre.|D
+Succession|2018|S|Dr|4|60|Une famille de magnats se déchire.|C
+The Last of Us|2023|S|Dr,Th|1|55|Survie après une pandémie fongique.|C
+Chernobyl|2019|S|Dr|4|60|La catastrophe nucléaire de 1986.|C
+True Detective|2014|S|Po,Th|4|55|Des enquêtes sombres en Louisiane.|C
+Les Soprano|1999|S|Dr,Po|4|55|Un boss mafieux chez le psy.|C
+Sur écoute|2002|S|Po,Dr|4|58|Baltimore, flics et dealers.|C
+Mad Men|2007|S|Dr|4|47|Les pubards de Madison Avenue.|P
+Fleabag|2016|S|Co,Dr|0|27|Une trentenaire chaotique à Londres.|P
+Severance|2022|S|SF,Th|4|50|Des employés à la mémoire coupée.|A
+Foundation|2021|S|SF|4|60|L’empire galactique s’effondre.|A
+Slow Horses|2022|S|Th|4|45|Des espions britanniques ratés.|A
+Shrinking|2023|S|Co,Dr|2|35|Un psy brise les règles.|A
+Downton Abbey|2010|S|Dr|5|55|Aristocrates et domestiques.|P
+Dr House|2004|S|Dr|4|44|Un médecin génial et exécrable.|P
+Dexter|2006|S|Th,Po|1|52|Un expert médico-légal tueur en série.|P
+Lost|2004|S|Fa,Av|4|43|Des naufragés sur une île mystérieuse.|D
+Vikings|2013|S|Dr,Av|3|45|La légende de Ragnar.|N,P
+Arcane|2021|S|An,Fa|3|42|Deux sœurs dans un monde en guerre.|N
+Avatar : le dernier maître de l’air|2005|S|An,Av|5|23|Un enfant maître des quatre éléments.|N,P
+One Piece|1999|S|An,Av|5|24|Luffy cherche le trésor ultime.|N
+Naruto|2002|S|An,Av|3|23|Un ninja rêve de devenir Hokage.|N
+Death Note|2006|S|An,Th|4|23|Un lycéen trouve le carnet de la mort.|N
+L’Attaque des Titans|2013|S|An,Fa|3|24|L’humanité face aux titans.|N,P
+Rick et Morty|2013|S|An,SF|0|22|Un savant fou et son petit-fils.|N
+Les Simpson|1989|S|An,Co|0|22|La famille jaune de Springfield.|D
+South Park|1997|S|An,Co|0|22|Quatre gamins déjantés du Colorado.|P
+Les Petits Meurtres d’Agatha Christie|2009|S|Po|5|90|Des enquêtes à la française.|F
+Capitaine Marleau|2015|S|Po,Co|5|90|Une capitaine excentrique.|F
+Un village français|2009|S|Dr|4|52|Un village sous l’Occupation.|F
+Au service de la France|2015|S|Co,Po|0|25|Des espions des années 60.|T,F
+Baron noir|2016|S|Dr|4|52|Politique et coulisses du pouvoir.|C
+Fais pas ci, fais pas ça|2007|S|Co|0|26|Deux familles opposées.|F`;
+(function(){var gm={Co:"Comédie",Th:"Thriller",Dr:"Drame",SF:"Sci-fi",An:"Animation",Av:"Aventure",Po:"Policier",Fa:"Fantastique"},pm={N:"Netflix",P:"Prime Video",D:"Disney+",C:"Canal+",A:"Apple TV+",T:"Arte.tv",F:"France.tv",I:"Internet Archive"};
+MORE.split("\n").forEach(function(l){var a=l.split("|");if(a.length<8||C.some(function(c){return c[0]==a[0]}))return;
+C.push([a[0],+a[1],a[2]=="S"?"Série":"Film",a[3].split(",").map(function(g){return gm[g]}),+a[4],+a[5],a[6]]);
+P[a[0]]=a[7].split(",").map(function(p){return pm[p]})})})();
+function nz(s){return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+var sel={t:null,g:[],p:[],d:null,q:""};
+function $(i){return document.getElementById(i)}
+var EM={"Intouchables":"🤝","La Cité de la peur":"🎭","Kaamelott":"🗡️","Le Dîner de cons":"🍽️","Brooklyn Nine-Nine":"🚔","The Grand Budapest Hotel":"🏨","Dix pour cent":"📞","Get Out":"☕","Le Silence des agneaux":"🦋","Stranger Things":"🔦","Hérédité":"🏚️","The Haunting of Hill House":"👻","Nosferatu":"🦇","Gone Girl":"🔍","La vie est belle":"😇","Le Fabuleux Destin d’Amélie Poulain":"🍓","Un homme d’exception":"🧮","This Is Us":"👨‍👩‍👧","Là-haut":"🎈","Mad Max: Fury Road":"🏜️","John Wick":"🐶","Le Cercle rouge":"🔴","Les Aventuriers de l’arche perdue":"🏺","Peaky Blinders":"🧢","Inception":"🌀","Black Mirror":"📱","Matrix":"💊","Metropolis":"🤖","Dark":"⏳","Parasite":"🪨","Sherlock":"🕵️","Le Voyage de Chihiro":"🐉","Ratatouille":"🐀","Le Seigneur des anneaux":"💍","Ted Lasso":"⚽","Charade":"💎","Le Voyage dans la Lune":"🌙"};
+var IMG={"Get Out":"data:image/jpeg;base64,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"};
+function pic(c){return IMG[c[0]]?'url('+IMG[c[0]]+') center top/cover':null}
+function em(c){return EM[c[0]]||ME[c[4]]}
+function bg(c){var h=0;for(var i=0;i<c[0].length;i++)h=(h*31+c[0].charCodeAt(i))%360;return 'linear-gradient(160deg,hsl('+h+',60%,38%),hsl('+((h+40)%360)+',55%,9%))'}
+function chips(a,k){return '<div class="chips">'+a.map(function(v){return '<button class="chip" data-k="'+k+'" data-v="'+v+'">'+v+'</button>'}).join('')+'</div>'}
+$('panel').innerHTML='<div class="lbl">Type</div>'+chips(['Film','Série'],'t')+'<div class="lbl">Genre</div>'+chips(G,'g')+'<div class="lbl">Mon appli</div>'+chips(AP,'p')+'<div class="lbl">Durée max</div>'+chips(['30 min','1h30','2h'],'d')+'<button class="clr" id="clr">Tout effacer</button>';
+$('fb').onclick=function(){$('panel').classList.toggle('open')};
+$('panel').onclick=function(e){
+ if(e.target.id=='clr'){sel={t:null,g:[],p:[],d:null,q:""};$('q').value='';document.querySelectorAll('.chip.on').forEach(function(x){x.classList.remove('on')});render();return}
+ var b=e.target.closest('.chip');if(!b)return;var k=b.dataset.k,v=b.dataset.v;
+ if(k=='t'||k=='d'){var was=b.classList.contains('on');document.querySelectorAll('[data-k="'+k+'"]').forEach(function(x){x.classList.remove('on')});if(was)sel[k]=null;else{b.classList.add('on');sel[k]=v}}
+ else{b.classList.toggle('on');var a=sel[k],i=a.indexOf(v);i<0?a.push(v):a.splice(i,1)}
+ render()};
+function lim(){return sel.d=='30 min'?30:sel.d=='1h30'?90:sel.d=='2h'?120:9999}
+function ok(c){var L=lim();
+ if(sel.t&&c[2]!=sel.t)return false;
+ if(sel.q&&nz(c[0]).indexOf(sel.q)<0)return false;
+ if(sel.g.length&&!c[3].some(function(g){return sel.g.indexOf(g)>=0}))return false;
+ if(sel.p.length&&!(P[c[0]]||[]).some(function(a){return sel.p.indexOf(a)>=0}))return false;
+ if(c[2]=="Film"&&c[5]>L)return false;
+ if(c[2]=="Série"&&L<30&&c[5]>L)return false;
+ return true}
+function card(c){var i=C.indexOf(c);var p=pic(c);return '<button class="card" aria-label="'+c[0]+'" data-i="'+i+'" style="background:'+(p||bg(c))+'">'+(p?'':'<span class="e">'+em(c)+'</span>')+(c[2]=="Série"?'<span class="tag">SÉRIE</span>':'')+(p?'':'<span class="t">'+c[0]+'<small>'+c[1]+'</small></span>')+'</button>'}
+function hero(c){var q=encodeURIComponent(c[0]);
+ var h=$('hero');h.style.setProperty('--hg',pic(c)||bg(c));
+ h.innerHTML=''+(pic(c)?'':'<div class="big">'+em(c)+'</div>')+'<h1>'+c[0]+'</h1><div class="m">'+c[1]+' · '+c[2]+' · '+c[3].join(', ')+' · '+(c[2]=="Série"?'~'+c[5]+' min/ép.':c[5]+' min')+'</div><p>'+c[6]+'</p><div class="row-b"><a class="b w" style="text-decoration:none" target="_blank" rel="noopener" href="https://www.justwatch.com/fr/recherche?q='+q+'">▶ Où le voir ?</a><button class="b g" id="rnd">🎲 Surprends-moi</button></div>';
+ $('rnd').onclick=function(){var p=C.filter(ok);if(!p.length)p=C;hero(p[Math.floor(Math.random()*p.length)])}}
+var cur=null;
+function render(){
+ var all=C.filter(ok),h='';
+ if(!all.length){$('rows').innerHTML='<div class="nores">Rien ne correspond. Enlève un filtre 😉</div>';return}
+ if(!cur||all.indexOf(cur)<0){cur=all[Math.floor(Math.random()*all.length)];hero(cur)}
+ for(var m=0;m<6;m++){var l=all.filter(function(c){return c[4]==m});if(l.length)h+='<h2>'+M[m]+'</h2><div class="row">'+l.map(card).join('')+'</div>'}
+ var s=all.filter(function(c){return c[2]=="Série"});if(s.length&&!sel.t)h+='<h2>📺 Séries</h2><div class="row">'+s.map(card).join('')+'</div>';
+ $('rows').innerHTML=h}
+$('rows').onclick=function(e){var b=e.target.closest('.card');if(!b)return;var c=C[b.dataset.i],q=encodeURIComponent(c[0]);
+ $('sheet').innerHTML='<div class="sh" style="background:'+(pic(c)||bg(c))+';'+(pic(c)?'height:260px':'')+'">'+(pic(c)?'':em(c))+'<button class="x" id="x">✕</button></div><div class="sb"><h3>'+c[0]+'</h3><div style="color:#a8a8a8;font-size:.85rem">'+c[1]+' · '+c[2]+' · '+c[3].join(', ')+' · '+(c[2]=="Série"?'~'+c[5]+' min/ép.':c[5]+' min')+'</div><p>'+c[6]+'</p><div style="font-size:.8rem;color:#a8a8a8">Souvent sur :</div><div class="pf">'+(P[c[0]]||['?']).map(function(a){return '<span>'+a+'</span>'}).join('')+'</div><a class="b w" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://www.justwatch.com/fr/recherche?q='+q+'">▶ Où le voir ?</a></div>';
+ $('modal').classList.add('open');$('x').onclick=function(){$('modal').classList.remove('open')}};
+$('modal').onclick=function(e){if(e.target.id=='modal')$('modal').classList.remove('open')};
+var W;
+function wchips(a,k,lab){return '<div class="lbl">'+lab+'</div><div class="chips">'+a.map(function(v,i){return '<button class="chip" data-w="'+k+'" data-v="'+(k=='m'?i:v)+'">'+v+'</button>'}).join('')+'</div>'}
+function openAdv(){W={t:null,m:[],g:[],p:[],d:null};
+ $('sheet').innerHTML='<div class="sb"><button class="x" id="x2" style="position:static;float:right">✕</button><h3>🎯 Conseille-moi</h3><div style="color:#a8a8a8;font-size:.85rem">Choisis tes critères, tout est optionnel.</div>'+wchips(['Film','Série'],'t','Je veux')+wchips(M,'m','Humeur')+wchips(G,'g','Genre')+wchips(AP,'p','Mon appli')+wchips(['30 min','1h30','2h'],'d','Durée max')+'<button class="b w" id="wgo" style="width:100%;margin-top:16px">Trouver mon film</button><div id="wres"></div></div>';
+ $('modal').classList.add('open')}
+function advGo(){
+ var L=W.d=='30 min'?30:W.d=='1h30'?90:W.d=='2h'?120:9999;
+ var l=C.filter(function(c){
+  if(W.t&&c[2]!=W.t)return false;
+  if(W.p.length&&!(P[c[0]]||[]).some(function(a){return W.p.indexOf(a)>=0}))return false;
+  if(c[2]=="Film"&&c[5]>L)return false;
+  if(c[2]=="Série"&&L<30&&c[5]>L)return false;
+  return true});
+ l=l.map(function(c){var s=Math.random();
+  if(W.m.indexOf(String(c[4]))>=0)s+=3;
+  c[3].forEach(function(g){if(W.g.indexOf(g)>=0)s+=2});
+  return [c,s]}).filter(function(x){return (!W.m.length&&!W.g.length)||x[1]>=2}).sort(function(a,b){return b[1]-a[1]}).slice(0,3);
+ var h;
+ if(!l.length)h='<p style="color:#a8a8a8;margin-top:14px">Aucun résultat avec ces critères. Essaie d’en enlever un 😉</p>';
+ else h='<h3 style="margin:18px 0 8px">Pour toi :</h3>'+l.map(function(x){var c=x[0],q=encodeURIComponent(c[0]),p=pic(c);
+  return '<div style="display:flex;gap:10px;margin-bottom:14px"><div style="flex:0 0 70px;height:100px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:2rem;background:'+(p||bg(c))+'">'+(p?'':em(c))+'</div><div><b>'+c[0]+'</b> <span style="color:#a8a8a8;font-size:.8rem">('+c[1]+' · '+c[2]+' · '+(c[2]=="Série"?'~'+c[5]+' min/ép.':c[5]+' min')+')</span><div style="font-size:.85rem;margin:2px 0">'+c[6]+'</div><div style="font-size:.78rem;color:#a8a8a8">Souvent sur : '+(P[c[0]]||['?']).join(', ')+'</div><a class="lk" style="color:#e50914;font-weight:700;font-size:.85rem;text-decoration:none" target="_blank" rel="noopener" href="https://www.justwatch.com/fr/recherche?q='+q+'">▶ Où le voir ? →</a></div></div>'}).join('');
+ $('wres').innerHTML=h;$('wres').scrollIntoView({behavior:'smooth',block:'nearest'})}
+$('adv').onclick=openAdv;
+$('sheet').addEventListener('click',function(e){
+ if(e.target.id=='x2'){$('modal').classList.remove('open');return}
+ if(e.target.id=='wgo'){advGo();return}
+ var b=e.target.closest('[data-w]');if(!b)return;var k=b.dataset.w,v=b.dataset.v;
+ if(k=='t'||k=='d'){var was=b.classList.contains('on');document.querySelectorAll('[data-w="'+k+'"]').forEach(function(x){x.classList.remove('on')});if(was)W[k]=null;else{b.classList.add('on');W[k]=v}}
+ else{b.classList.toggle('on');var a=W[k],i=a.indexOf(v);i<0?a.push(v):a.splice(i,1)}});
+
+$('q').oninput=function(){sel.q=nz(this.value.trim());render()};
+render();
+</script></body></html>

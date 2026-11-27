@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07101f">
+<title>CineEscoope — Films & séries</title>
+<style>
+:root{--bg:#060b14;--panel:#0d1728;--panel2:#12213a;--blue:#2588ff;--cyan:#55c7ff;--text:#f4f7fb;--muted:#9aa9bd;--line:#1e304a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 75% -10%,#12315b 0,transparent 38%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer}.topbar{height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,5vw,72px);border-bottom:1px solid #ffffff12;background:#07101fdd;backdrop-filter:blur(14px);position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:22px;letter-spacing:-.8px}.brand-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,var(--cyan),#1457d9);display:grid;place-items:center;box-shadow:0 5px 24px #168bff55}.brand-mark svg{width:21px}.brand span:last-child{color:#65baff}
+.nav{display:flex;gap:22px;color:var(--muted);font-size:14px}.nav a{color:inherit;text-decoration:none}.nav a:hover{color:white}.actions{display:flex;align-items:center;gap:10px}.search{width:min(240px,28vw);background:#101e32;border:1px solid var(--line);border-radius:22px;padding:10px 14px;color:white;outline:none}.search:focus{border-color:var(--blue)}
+main{max-width:1440px;margin:auto;padding:0 clamp(18px,5vw,72px) 70px}.hero{margin:30px 0 34px;min-height:360px;border:1px solid #4aa8ff33;border-radius:25px;overflow:hidden;position:relative;display:flex;align-items:end;background:linear-gradient(90deg,#07101ff5 0%,#07101fce 44%,#07101f20 100%),radial-gradient(circle at 75% 25%,#48b7ff99,transparent 24%),linear-gradient(130deg,#102a50,#09172c 50%,#173e69)}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#050b15 0%,transparent 55%);pointer-events:none}.hero-art{position:absolute;right:8%;top:8%;width:36%;height:85%;border-radius:48% 48% 12px 12px;background:linear-gradient(150deg,#b6e5ff,#2b82c9 35%,#102849 72%);opacity:.55;filter:drop-shadow(0 0 55px #3aabff55);clip-path:polygon(50% 0,90% 15%,100% 100%,0 100%,10% 15%)}.hero-content{position:relative;z-index:1;padding:42px;max-width:610px}.eyebrow{color:#70c5ff;text-transform:uppercase;letter-spacing:2px;font-size:11px;font-weight:800}.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.02;margin:13px 0}.hero p{color:#c3d0e1;line-height:1.6;max-width:480px}.meta{color:#9fb1c8;font-size:13px;margin:14px 0 22px}.btn{border:0;border-radius:11px;padding:12px 17px;font-weight:750}.primary{background:linear-gradient(100deg,#1687ff,#2860ed);color:white;box-shadow:0 7px 24px #147eff35}.secondary{background:#ffffff13;color:white;border:1px solid #ffffff24;margin-left:8px}.section-head{display:flex;align-items:center;justify-content:space-between;margin:34px 0 16px}.section-head h2{font-size:21px;margin:0}.section-head small{color:var(--muted)}.filters{display:flex;gap:9px;overflow:auto;padding-bottom:5px}.chip{border:1px solid var(--line);background:#0c1728;color:#b7c6d9;padding:8px 15px;border-radius:20px;white-space:nowrap}.chip.active,.chip:hover{background:#1459a4;border-color:#288bff;color:white}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}.card{min-width:0;cursor:pointer;transition:transform .2s}.card:hover{transform:translateY(-5px)}.poster{aspect-ratio:2/2.85;border-radius:13px;position:relative;overflow:hidden;display:flex;align-items:end;padding:15px;background:var(--art);border:1px solid #ffffff17;box-shadow:0 12px 28px #0005}.poster:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#020711ed,transparent 72%),radial-gradient(circle at 70% 20%,#ffffff33,transparent 30%)}.poster:after{content:"";position:absolute;inset:9% 12%;border:1px solid #ffffff2b;border-radius:48% 48% 8px 8px;transform:rotate(7deg);opacity:.55}.poster-title{position:relative;z-index:1;font-weight:900;font-size:clamp(14px,1.4vw,19px);line-height:1.05;text-shadow:0 2px 8px #000}.tag{position:absolute;top:10px;left:10px;background:#06101dcc;border:1px solid #ffffff2a;border-radius:6px;padding:4px 7px;font-size:10px;z-index:2}.fav{position:absolute;right:9px;top:8px;z-index:3;width:32px;height:32px;border-radius:50%;border:1px solid #ffffff44;background:#06101dcc;color:white;font-size:17px}.fav.on{color:#65baff}.card h3{font-size:14px;margin:10px 0 4px}.sub{color:var(--muted);font-size:12px}.empty{grid-column:1/-1;color:var(--muted);padding:28px;border:1px dashed var(--line);border-radius:14px;text-align:center}
+footer{border-top:1px solid var(--line);margin-top:55px;padding:22px 0;color:#7f90a7;font-size:12px;line-height:1.6}
+.modal{position:fixed;inset:0;background:#000b;display:none;place-items:center;padding:18px;z-index:10}.modal.show{display:grid}.dialog{width:min(760px,100%);background:#0b1627;border:1px solid #2a4567;border-radius:20px;overflow:hidden;box-shadow:0 30px 100px #000b}.dialog-top{height:210px;background:var(--art);position:relative}.dialog-top:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#0b1627,transparent 80%)}.close{position:absolute;right:14px;top:14px;z-index:2;border:0;border-radius:50%;width:35px;height:35px;background:#06101dcc;color:white;font-size:20px}.dialog-body{padding:0 25px 25px;position:relative;margin-top:-38px}.dialog h2{font-size:29px;margin:0 0 8px}.dialog p{color:#b7c6d9;line-height:1.6}.notice{font-size:12px;color:#8fa4bd;background:#101f34;border-radius:10px;padding:12px;margin-top:18px}.file-label{display:inline-block;background:#132944;border:1px solid #2b4d73;color:#c9e7ff;border-radius:9px;padding:10px 13px;margin-top:8px;cursor:pointer}.file-label input{display:none}video{width:100%;max-height:480px;background:#000;border-radius:12px;margin-top:14px;display:none;aspect-ratio:16/9}
+@media(max-width:950px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.nav{display:none}.hero-art{right:-2%;width:45%}}
+@media(max-width:600px){.topbar{height:62px;padding:0 15px}.brand{font-size:19px}.search{width:125px;padding:9px 10px}.hero{min-height:330px;margin-top:18px}.hero-content{padding:24px}.hero-art{right:-18%;width:65%;opacity:.35}.hero p{font-size:14px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.poster{border-radius:10px}.section-head h2{font-size:18px}.secondary{margin-left:4px}.btn{padding:11px 12px;font-size:13px}}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="app-icon.svg" type="image/svg+xml">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CineEscoope">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script>
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js").catch(() => {}));
+}
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="m7 4 13 8-13 8z"/></svg></div><div>Cine<span>Escoope</span></div></div>
+  <nav class="nav"><a href="#accueil">Accueil</a><a href="#catalogue">Films & séries</a><a href="#liste" id="myListLink">Ma liste</a></nav>
+  <div class="actions"><input id="search" class="search" placeholder="⌕  Rechercher..." aria-label="Rechercher"></div>
+</header>
+<main id="accueil">
+<section class="hero">
+  <div class="hero-art"></div>
+  <div class="hero-content">
+    <div class="eyebrow">Votre cinéma, partout</div>
+    <h1>Le prochain<br>grand film vous attend.</h1>
+    <p>Explorez des histoires, découvrez de nouveaux univers et composez votre propre liste de favoris.</p>
+    <div class="meta">CINEESCOOPE · ÉDITION DÉMO · 2026</div>
+    <button class="btn primary" onclick="scrollToCatalog()">Explorer le catalogue</button>
+    <button class="btn secondary" onclick="showImport()">Lire une vidéo</button>
+  </div>
+</section>
+<section id="catalogue">
+  <div class="section-head"><h2>À découvrir</h2><small id="count"></small></div>
+  <div class="filters" id="filters">
+    <button class="chip active" data-filter="Tout">Tout</button><button class="chip" data-filter="Action">Action</button><button class="chip" data-filter="Aventure">Aventure</button><button class="chip" data-filter="Comédie">Comédie</button><button class="chip" data-filter="Science-fiction">Science-fiction</button><button class="chip" data-filter="Drame">Drame</button><button class="chip" data-filter="Horreur">Horreur</button><button class="chip" data-filter="Super-héros">Super-héros</button><button class="chip" data-filter="Série">Séries</button>
+  </div>
+  <div class="section-head" id="listHeading"><h2 id="listTitle">Sélection CineEscoope</h2><small>Catalogue de démonstration</small></div>
+  <div class="grid" id="grid"></div>
+</section>
+<footer>
+  <strong style="color:#cfe7ff">CineEscoope</strong> — prototype de démonstration.<br>
+  Les titres présentés sont fictifs et les affiches sont des créations graphiques intégrées à l'interface. Cette version ne fournit pas de films ou séries protégés. Utilisez uniquement des vidéos que vous avez le droit de lire.
+</footer>
+</main>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="if(event.target===this)closeModal()">
+ <div class="dialog"><div class="dialog-top" id="dialogArt"><button class="close" onclick="closeModal()" aria-label="Fermer">×</button></div>
+ <div class="dialog-body"><div class="eyebrow" id="modalType"></div><h2 id="modalTitle"></h2><div class="sub" id="modalMeta"></div><p id="modalDesc"></p>
+ <button class="btn primary" id="watchBtn" onclick="playCurrent()">▶ Regarder maintenant</button>
+ <button class="btn secondary" id="modalFav" onclick="toggleCurrentFav()">♡ Ma liste</button>
+ <div class="notice" id="playNotice">La lecture se fait directement dans CineEscoope pour les titres disponibles. Les autres fiches sont des exemples de catalogue : ajoute un fichier vidéo que tu as le droit de regarder, ou attends l’intégration d’un catalogue autorisé.</div>
+ <label class="file-label">Choisir une vidéo personnelle <input type="file" id="videoFile" accept="video/*"></label><div class="sub" id="creditLine" style="margin-top:12px"></div>
+ <video id="player" controls playsinline></video>
+ </div></div>
+</div>
+<script>
+const movies=[
+ {id:1,title:"Big Buck Bunny",type:"Film",genre:"Comédie",year:2008,duration:"10 min",desc:"Un grand lapin paisible profite de sa journée jusqu’à ce que trois petits fauteurs de troubles viennent perturber la forêt. Film ouvert de la Blender Foundation, sous licence CC BY 3.0.",videoUrl:"https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4",credit:"© 2008 Blender Foundation · Big Buck Bunny · CC BY 3.0 · https://creativecommons.org/licenses/by/3.0/",art:"linear-gradient(145deg,#7dd7ed,#1266a8 48%,#071b39)"},
+ {id:2,title:"Sintel",type:"Film",genre:"Aventure",year:2010,duration:"15 min",desc:"Une jeune femme traverse un monde rude à la recherche du dragon qu’elle a recueilli. Film ouvert de la Blender Foundation, sous licence CC BY 3.0.",videoUrl:"https://download.blender.org/durian/movies/sintel-1024-surround.mp4",credit:"© Blender Foundation · Sintel · CC BY 3.0 · https://creativecommons.org/licenses/by/3.0/",art:"linear-gradient(145deg,#9b7dff,#253b9c 48%,#090d2b)"},
+ {id:3,title:"Tears of Steel",type:"Film",genre:"Science-fiction",year:2012,duration:"12 min",desc:"Dans un futur où Amsterdam est menacée, une équipe tente d’empêcher une invasion robotique. Film ouvert de la Blender Foundation, sous licence CC BY 3.0.",videoUrl:"https://download.blender.org/mango/tears_of_steel/tears_of_steel_720p.mp4",credit:"© Blender Foundation · Tears of Steel · CC BY 3.0 · https://creativecommons.org/licenses/by/3.0/",art:"linear-gradient(145deg,#ffb36b,#bd4c49 48%,#321b37)"},
+ {id:4,title:"Opération Boréale",type:"Film",genre:"Action",year:2025,duration:"1 h 56",desc:"Une équipe de secours doit coordonner une mission délicate au milieu d'une tempête polaire.",art:"linear-gradient(145deg,#c8f3ff,#3979b4 48%,#10213c)"},
+ {id:5,title:"Les Jours en désordre",type:"Série",genre:"Comédie",year:2026,duration:"10 épisodes",desc:"Dans une colocation pleine de surprises, chaque petite décision devient une grande aventure comique.",art:"linear-gradient(145deg,#ffe28a,#f28a56 48%,#6a315c)"},
+ {id:6,title:"Le Royaume de verre",type:"Film",genre:"Aventure",year:2024,duration:"1 h 42",desc:"Deux frères découvrent une cité cachée où chaque bâtiment raconte une histoire oubliée.",art:"linear-gradient(145deg,#a8f0d0,#328e9b 48%,#102b4c)"},
+ {id:7,title:"Code Fantôme",type:"Série",genre:"Science-fiction",year:2025,duration:"6 épisodes",desc:"Une équipe de jeunes passionnés enquête sur un programme mystérieux qui semble anticiper l'avenir.",art:"linear-gradient(145deg,#75f0e7,#146a9c 48%,#10152f)"},
+ {id:8,title:"Le Dernier Virage",type:"Film",genre:"Action",year:2024,duration:"1 h 51",desc:"Après une longue pause, une pilote revient sur le circuit pour relever le défi le plus important de sa carrière.",art:"linear-gradient(145deg,#ffbd7b,#d64e42 48%,#35182c)"},
+ {id:9,title:"Un été pour rire",type:"Film",genre:"Comédie",year:2025,duration:"1 h 34",desc:"Un séjour de vacances improvisé transforme une bande de voisins en équipe improbable.",art:"linear-gradient(145deg,#fff19a,#65c4bd 48%,#215080)"},
+ {id:10,title:"Nos chemins",type:"Série",genre:"Drame",year:2024,duration:"7 épisodes",desc:"Trois parcours se croisent dans un récit sensible sur les choix, l'amitié et les nouveaux départs.",art:"linear-gradient(145deg,#e8b9e9,#8064b5 48%,#17244d)"},
+ {id:11,title:"La Maison sans écho",type:"Film",genre:"Horreur",year:2026,duration:"1 h 39",desc:"Une fratrie hérite d'une vieille demeure où chaque pièce semble garder un secret.",art:"linear-gradient(145deg,#5b102c,#d32354 48%,#090612)"},
+ {id:12,title:"Gardiens de l'aube",type:"Film",genre:"Super-héros",year:2026,duration:"2 h 01",desc:"Une équipe de héros inconnus doit protéger la planète et apprendre à se faire confiance.",art:"linear-gradient(145deg,#1c55a8,#55aaff 48%,#07102a)"}
+];
+let activeFilter="Tout",showFavorites=false,current=null;
+let favorites=JSON.parse(localStorage.getItem("cineescoope-favs")||"[]");
+const grid=document.getElementById("grid"),search=document.getElementById("search");
+function render(){
+ const q=search.value.trim().toLocaleLowerCase("fr");
+ const items=movies.filter(m=>(activeFilter==="Tout"||(activeFilter==="Série"?m.type==="Série":m.genre===activeFilter))&&(!showFavorites||favorites.includes(m.id))&&(!q||(m.title+" "+m.genre+" "+m.type).toLocaleLowerCase("fr").includes(q)));
+ document.getElementById("listTitle").textContent=showFavorites?"Ma liste":"Sélection CineEscoope";
+ document.getElementById("count").textContent=items.length+" titre"+(items.length>1?"s":"");
+ grid.innerHTML=items.length?items.map(m=>`<article class="card" onclick="openMovie(${m.id})"><div class="poster" style="--art:${m.art};background-image:linear-gradient(0deg,#020711d9,transparent 60%),url('posters/poster-${m.id}.jpg')"><span class="tag">${m.type}</span><button class="fav ${favorites.includes(m.id)?"on":""}" aria-label="Ajouter aux favoris" onclick="event.stopPropagation();toggleFav(${m.id})">${favorites.includes(m.id)?"♥":"♡"}</button><div class="poster-title">${m.title}</div></div><h3>${m.title}</h3><div class="sub">${m.year} · ${m.genre} · ${m.duration}</div></article>`).join(""):`<div class="empty">${showFavorites?"Ta liste est vide pour le moment. Ajoute des titres avec le cœur.":"Aucun résultat. Essaie une autre recherche ou catégorie."}</div>`;
+}
+function scrollToCatalog(){document.getElementById("catalogue").scrollIntoView({behavior:"smooth"})}
+function toggleFav(id){favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];localStorage.setItem("cineescoope-favs",JSON.stringify(favorites));render();if(current&&current.id===id)updateModalFav()}
+function updateModalFav(){document.getElementById("modalFav").textContent=favorites.includes(current.id)?"♥ Dans ma liste":"♡ Ma liste"}
+function toggleCurrentFav(){if(current)toggleFav(current.id)}
+function openMovie(id){
+ current=movies.find(m=>m.id===id);
+ document.getElementById("dialogArt").style.setProperty("--art",current.art);
+ document.getElementById("dialogArt").style.background=current.art;
+ document.getElementById("modalType").textContent=current.type+" · "+current.genre;
+ document.getElementById("modalTitle").textContent=current.title;
+ document.getElementById("modalMeta").textContent=current.year+" · "+current.duration;
+ document.getElementById("modalDesc").textContent=current.desc;
+ const p=document.getElementById("player"); p.pause(); p.style.display="none";
+ if(p.src){URL.revokeObjectURL(p.src);p.removeAttribute("src");p.load();}
+ document.getElementById("videoFile").value="";
+ document.getElementById("watchBtn").style.display=current.videoUrl?"inline-block":"none";
+ document.getElementById("playNotice").textContent=current.videoUrl
+   ?"Ce film est disponible gratuitement et se lance directement dans le lecteur CineEscoope."
+   :"Cette fiche est une démonstration. Aucun flux autorisé n’est encore associé à ce titre. Tu peux lire ici un fichier vidéo personnel autorisé.";
+ document.getElementById("creditLine").textContent=current.credit||"";
+ updateModalFav(); document.getElementById("modal").classList.add("show");
+}
+function playCurrent(){
+ if(!current||!current.videoUrl)return;
+ const p=document.getElementById("player");
+ if(p.src){URL.revokeObjectURL(p.src);}
+ p.src=current.videoUrl; p.style.display="block"; p.load();
+ p.play().catch(()=>{document.getElementById("playNotice").textContent="Appuie sur Lecture dans le lecteur si la lecture ne démarre pas automatiquement."});
+ p.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function closeModal(){document.getElementById("modal").classList.remove("show");const p=document.getElementById("player");p.pause();if(p.src){URL.revokeObjectURL(p.src);p.removeAttribute("src");p.load()}}
+function showImport(){if(!current){current={id:null,title:"Ta vidéo"};document.getElementById("modalType").textContent="LECTEUR VIDÉO";document.getElementById("modalTitle").textContent="Lire une vidéo personnelle";document.getElementById("modalMeta").textContent="Fichier depuis ton appareil";document.getElementById("modalDesc").textContent="Sélectionne un fichier vidéo que tu possèdes ou que tu es autorisé à lire.";document.getElementById("dialogArt").style.background="linear-gradient(145deg,#1c6bb1,#07172c)";document.getElementById("modal").classList.add("show")}document.getElementById("videoFile").click()}
+document.getElementById("videoFile").addEventListener("change",e=>{const file=e.target.files[0];if(!file)return;const p=document.getElementById("player");if(p.src)URL.revokeObjectURL(p.src);p.src=URL.createObjectURL(file);p.style.display="block";document.getElementById("creditLine").textContent="Vidéo personnelle sélectionnée sur ton appareil.";p.load();p.play().catch(()=>{});p.scrollIntoView({behavior:"smooth",block:"center"})});
+document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("button[data-filter]");if(!b)return;activeFilter=b.dataset.filter;showFavorites=false;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x===b));render()});
+search.addEventListener("input",render);
+document.getElementById("myListLink").addEventListener("click",e=>{e.preventDefault();showFavorites=true;activeFilter="Tout";document.querySelectorAll(".chip").forEach((x,i)=>x.classList.toggle("active",i===0));render();scrollToCatalog()});
+render();
+</script>
+</body></html>
